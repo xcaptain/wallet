@@ -6,6 +6,12 @@
 
 网站是核心组件，用户在网站上直接登录，可以访问自己的钱包
 
+### auth
+
+circle wallet sdk 内置了一些登录方式，如 google oauth, email，但是在这里我们使用已经很成熟的 `next-auth` 来实现各种登录方式。对于 circle 来说，不在乎用户在 app 侧是如何登录的，app 登录成功后，去 circle 注册用户，创建钱包，设置 PIN 才是circle 要关注的
+
+
+
 ## Wallet widget
 
 这是一个钱包小挂件，传统钱包如 metamask, phantom 要求安装浏览器插件，而支持 walletConnect 协议的客户端钱包，需要扫描二维码授权网站使用钱包。
