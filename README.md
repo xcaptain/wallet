@@ -1,38 +1,20 @@
-# sv
+# intuipay wallet
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+基于 circle wallet 基础架构实现的一个web2钱包 app，用户进行登录授权后可以访问自己的钱包，再发送交易时，通过两步验证（输入PIN）来确认发送
 
-## Creating a project
+## 网站
 
-If you're seeing this, you've probably already done this step. Congrats!
+网站是核心组件，用户在网站上直接登录，可以访问自己的钱包
 
-```bash
-# create a new project in the current directory
-npx sv create
+## Wallet widget
 
-# create a new project in my-app
-npx sv create my-app
-```
+这是一个钱包小挂件，传统钱包如 metamask, phantom 要求安装浏览器插件，而支持 walletConnect 协议的客户端钱包，需要扫描二维码授权网站使用钱包。
+我这个 widget 希望做成一段js代码，能集成到网站上，用户点击一个按钮，就能解锁自己的钱包，跟当前网页功能进行交互
 
-## Developing
+### Wagmi connector
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+要实现一个浏览器内的钱包，要自己实现一个 wagmi connector，这样才能方便开发者集成，并且遵循钱包的标准。
 
-```bash
-npm run dev
+### dAPP market
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+钱包做完后，还可以内置一些应用，这样可以快速给第三方app导流，获得一些额外的收入和合作
