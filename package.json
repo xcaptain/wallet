@@ -17,6 +17,7 @@
 		"@auth/d1-adapter": "^1.10.0",
 		"@auth/sveltekit": "^1.10.0",
 		"@circle-fin/user-controlled-wallets": "^8.2.0",
+		"@circle-fin/w3s-pw-web-sdk": "^1.1.11",
 		"@sveltejs/adapter-cloudflare": "^7.0.4",
 		"@sveltejs/kit": "^2.16.0",
 		"@sveltejs/vite-plugin-svelte": "^5.0.0",

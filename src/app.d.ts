@@ -12,6 +12,9 @@ declare global {
 				AUTH_SECRET: string;
 				AUTH_GOOGLE_ID: string;
 				AUTH_GOOGLE_SECRET: string;
+
+				CIRCLE_API_KEY: string;
+				CIRCLE_APP_ID: string;
 			}
 		}
 	}
