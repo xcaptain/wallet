@@ -31,7 +31,7 @@
 						<li><span class="font-medium">{session.user.name}</span></li>
 						<li><span class="text-sm opacity-70">{session.user.email}</span></li>
 						<li><hr class="my-2"></li>
-						<li><a href="/wallet">我的钱包</a></li>
+						<li><a href="/wallets">我的钱包</a></li>
 						<li><a href="/settings">设置</a></li>
 						<li>
 							<form method="POST" action="/auth/signout">
