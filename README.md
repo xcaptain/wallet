@@ -35,3 +35,8 @@ circle wallet sdk 内置了一些登录方式，如 google oauth, email，但是
 wrangler d1 execute prod-wallet --file="./database/schema.sql"
 ```
 
+### 配置环境变量
+
+```shell
+wrangler secret put AUTH_SECRET
+```
