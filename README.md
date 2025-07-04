@@ -1,4 +1,4 @@
-# intuipay wallet
+# wallet
 
 基于 circle wallet 基础架构实现的一个web2钱包 app，用户进行登录授权后可以访问自己的钱包，再发送交易时，通过两步验证（输入PIN）来确认发送
 
@@ -18,3 +18,14 @@
 ### dAPP market
 
 钱包做完后，还可以内置一些应用，这样可以快速给第三方app导流，获得一些额外的收入和合作
+
+## 架构
+
+网站部署在新的 cloudflare workers 上，使用 `wrangler.jsonc` 作为配置文件
+
+### 初始化数据库
+
+```shell
+wrangler d1 execute prod-wallet --file="./database/schema.sql"
+```
+
