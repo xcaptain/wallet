@@ -47,18 +47,19 @@ export const actions = {
         const circleUserId = 'e104a258-d586-4e55-88ad-d8376cfd26ea';
 
         // acquire session token
-        // const userSessionTokenResponse = await circleClient.createUserToken({
-        //     userId: circleUserId,
-        // });
+        const userSessionTokenResponse = await circleClient.createUserToken({
+            userId: circleUserId,
+        });
         // {
         //     userToken: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoTW9kZSI6IlBJTiIsImRldmVsb3BlckVudGl0eUVudmlyb25tZW50IjoiVEVTVCIsImVudGl0eUlkIjoiYTQzOTVmZTctN2Y3Mi00MDcxLTkyMmMtMThmOWI1YzVlOTE3IiwiZXhwIjoxNzUxNjQ4MzMxLCJpYXQiOjE3NTE2NDQ3MzEsImludGVybmFsVXNlcklkIjoiOGY1ZTE3YjgtMzI4ZC01OWE5LWI0NTgtZDk1MmFhYWUxMGVmIiwiaXNzIjoiaHR0cHM6Ly9wcm9ncmFtbWFibGUtd2FsbGV0LmNpcmNsZS5jb20iLCJqdGkiOiI5MjgyZGQzNC1jMmU4LTRjNmQtOTNlMi01NGQzMzcwNWM2YjMiLCJzdWIiOiJlMTA0YTI1OC1kNTg2LTRlNTUtODhhZC1kODM3NmNmZDI2ZWEifQ.HpOMJSg33vnIp-X0n5w5ke7OEsJI1TwxHgDv6ShlMKZ6UwNzx_UH84E0NZZm_ZWnRw3PABPokvqaXUne5j4YKUkVnL6BoSBjWw7Lvhy9aZWCopqNz2bHcJ782VMQBik0LbSV7poO9w7qz8SZ1_d5HLgFY5MISjJ4Kswfn2puQNBQXG3Nmudlm6nY1HeHK7sPGTLEGVY8ibR73l-Tf6cloSlE9EHDkJ5YaJvlvTZEuYqxmlzIrmT6ZnllaIE0xn29E3PyNAFV9Gh8sfqqxae7CeH3VToNEWol9moaQt09alu0tdb4kcDIhUchHtWog17GEktOZ54VIN9QrF772o27xg',
         //     encryptionKey: 'CbftHw7A9MVAa3hpV8Ef3NgE6RsDsSdixIdC0aJHdNE='
         // }
-        // console.log('userSessionTokenResponse', userSessionTokenResponse);
+        console.log('userSessionTokenResponse', userSessionTokenResponse);
         // console.log('createUserResponse', createUserResponse);
 
         const createPinResponse = await circleClient.createUserPinWithWallets({
-            userToken: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoTW9kZSI6IlBJTiIsImRldmVsb3BlckVudGl0eUVudmlyb25tZW50IjoiVEVTVCIsImVudGl0eUlkIjoiYTQzOTVmZTctN2Y3Mi00MDcxLTkyMmMtMThmOWI1YzVlOTE3IiwiZXhwIjoxNzUxNjQ4MzMxLCJpYXQiOjE3NTE2NDQ3MzEsImludGVybmFsVXNlcklkIjoiOGY1ZTE3YjgtMzI4ZC01OWE5LWI0NTgtZDk1MmFhYWUxMGVmIiwiaXNzIjoiaHR0cHM6Ly9wcm9ncmFtbWFibGUtd2FsbGV0LmNpcmNsZS5jb20iLCJqdGkiOiI5MjgyZGQzNC1jMmU4LTRjNmQtOTNlMi01NGQzMzcwNWM2YjMiLCJzdWIiOiJlMTA0YTI1OC1kNTg2LTRlNTUtODhhZC1kODM3NmNmZDI2ZWEifQ.HpOMJSg33vnIp-X0n5w5ke7OEsJI1TwxHgDv6ShlMKZ6UwNzx_UH84E0NZZm_ZWnRw3PABPokvqaXUne5j4YKUkVnL6BoSBjWw7Lvhy9aZWCopqNz2bHcJ782VMQBik0LbSV7poO9w7qz8SZ1_d5HLgFY5MISjJ4Kswfn2puQNBQXG3Nmudlm6nY1HeHK7sPGTLEGVY8ibR73l-Tf6cloSlE9EHDkJ5YaJvlvTZEuYqxmlzIrmT6ZnllaIE0xn29E3PyNAFV9Gh8sfqqxae7CeH3VToNEWol9moaQt09alu0tdb4kcDIhUchHtWog17GEktOZ54VIN9QrF772o27xg',
+            // userToken: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoTW9kZSI6IlBJTiIsImRldmVsb3BlckVudGl0eUVudmlyb25tZW50IjoiVEVTVCIsImVudGl0eUlkIjoiYTQzOTVmZTctN2Y3Mi00MDcxLTkyMmMtMThmOWI1YzVlOTE3IiwiZXhwIjoxNzUxNjQ4MzMxLCJpYXQiOjE3NTE2NDQ3MzEsImludGVybmFsVXNlcklkIjoiOGY1ZTE3YjgtMzI4ZC01OWE5LWI0NTgtZDk1MmFhYWUxMGVmIiwiaXNzIjoiaHR0cHM6Ly9wcm9ncmFtbWFibGUtd2FsbGV0LmNpcmNsZS5jb20iLCJqdGkiOiI5MjgyZGQzNC1jMmU4LTRjNmQtOTNlMi01NGQzMzcwNWM2YjMiLCJzdWIiOiJlMTA0YTI1OC1kNTg2LTRlNTUtODhhZC1kODM3NmNmZDI2ZWEifQ.HpOMJSg33vnIp-X0n5w5ke7OEsJI1TwxHgDv6ShlMKZ6UwNzx_UH84E0NZZm_ZWnRw3PABPokvqaXUne5j4YKUkVnL6BoSBjWw7Lvhy9aZWCopqNz2bHcJ782VMQBik0LbSV7poO9w7qz8SZ1_d5HLgFY5MISjJ4Kswfn2puQNBQXG3Nmudlm6nY1HeHK7sPGTLEGVY8ibR73l-Tf6cloSlE9EHDkJ5YaJvlvTZEuYqxmlzIrmT6ZnllaIE0xn29E3PyNAFV9Gh8sfqqxae7CeH3VToNEWol9moaQt09alu0tdb4kcDIhUchHtWog17GEktOZ54VIN9QrF772o27xg',
+            userToken: userSessionTokenResponse.data?.userToken || '',
             blockchains: ['ETH-SEPOLIA']
         });
 
@@ -67,6 +68,8 @@ export const actions = {
         const data = await request.formData();
         const walletName = data.get('walletName')?.toString();
         const blockchain = data.get('blockchain')?.toString();
+        
+        // TODO: 缓存钱包信息到db，避免每次都从 circle api获取，加快速度
 
         // 验证输入
         if (!walletName || walletName.trim().length === 0) {

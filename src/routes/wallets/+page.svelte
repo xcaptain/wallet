@@ -2,12 +2,18 @@
     import { enhance } from "$app/forms";
     import type { PageProps } from "./$types";
     import { W3SSdk } from "@circle-fin/w3s-pw-web-sdk";
+    import { onMount } from "svelte";
 
     // circle w3s sdk
-    const sdk = new W3SSdk({
-        appSettings: {
-            appId: "TODO: 是否要保密？",
-        },
+    let sdk: W3SSdk | undefined;
+
+    onMount(() => {
+        // 初始化 SDK
+        sdk = new W3SSdk({
+            appSettings: {
+                appId: "d0c6a643-72f9-5f52-a52d-edbbc51c3561",
+            },
+        });
     });
 
     let { data, form }: PageProps = $props();
@@ -194,7 +200,7 @@
                             userToken: responseData.userToken,
                             encryptionKey: responseData.encryptionKey,
                         });
-                        sdk.execute('challengeId', (error, result) => {
+                        sdk.execute(responseData.challengeId, (error, result) => {
                             if (error) {
                                 console.error("Error executing challengeId:", error);
                                 return;
