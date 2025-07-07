@@ -62,6 +62,7 @@ export const actions = {
         const circleUser = await circleClient.getUser({
             userId: session.user.id,
         });
+        console.log('getUserResponse', circleUser.data);
         // circleUser.data?.user
         if (!circleUser.data?.user?.id) {
             // 未在 circle 创建用户，先创建用户
