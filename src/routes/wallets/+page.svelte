@@ -38,6 +38,10 @@
     function closeCreateModal() {
         createWalletModal.close();
     }
+
+    async function triggerRefreshCircleWallets() {
+        await fetch('/api/wallet/refresh');
+    }
 </script>
 
 <svelte:head>
@@ -206,18 +210,20 @@
                                 return;
                             }
                             if (result.data) {
-                                console.log('signature: ', result.data.signature);
+                                console.log('data: ', result.data);
+
+                                
                             }
 
                             // TODO: 如果 callback 里返回了钱包信息，应该要在数据库创建钱包
                             console.log("Challenge ID executed successfully:", result);
+
+                            triggerRefreshCircleWallets();
                         });
 
                         // 此时返回了circle user 的：userToken 和 encryptionKey
                         // 通过这两个值，调用 circle sdk 为用户创建PIN
                         closeCreateModal();
-                        walletName = "我的钱包";
-                        blockchain = Blockchain.Eth;
                     }
                 };
             }}

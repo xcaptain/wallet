@@ -40,15 +40,6 @@ CREATE TABLE IF NOT EXISTS "verification_tokens" (
     PRIMARY KEY (token)
 );
 
--- 使用一个单独的 circle_id 而不是 user_id，似乎会更加安全
-CREATE TABLE IF NOT EXISTS "circle_users" (
-    id int NOT NULL PRIMARY KEY AUTOINCREMENT,
-    circle_id text NOT NULL UNIQUE,
-    user_id text NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP  
-);
-
 -- Circle API wallet 示例数据结构：
 -- {
 -- id: '1dd007e9-24a9-51b4-87c6-367330e00649',

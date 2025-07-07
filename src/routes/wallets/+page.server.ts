@@ -30,7 +30,7 @@ export const load = async ({ locals, platform }) => {
 
 
     return {
-        wallets
+        wallets,
     };
 };
 
@@ -48,9 +48,9 @@ export const actions = {
 
         // 确保区块链还未创建，一个用户只能在一条链上创建一个钱包
         const existingWallets = await platform?.env.DB.prepare(
-            "SELECT * FROM wallets WHERE user_id = ? AND blockchain = ?"
-        ).bind(session.user.id, blockchain).all();
-        if (existingWallets?.results && existingWallets?.results.length > 0) {
+            "SELECT * FROM wallets WHERE user_id = ?"
+        ).bind(session.user.id).all();
+        if (existingWallets?.results.some(wallet => wallet.blockchain === blockchain)) {
             return fail(400, {
                 message: '您已经在此区块链上创建了钱包，请勿重复创建！'
             });
@@ -86,21 +86,32 @@ export const actions = {
         console.log('userSessionTokenResponse', userSessionTokenResponse.data);
         // console.log('createUserResponse', createUserResponse);
 
-        const createPinResponse = await circleClient.createWallet({
-            // userToken: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoTW9kZSI6IlBJTiIsImRldmVsb3BlckVudGl0eUVudmlyb25tZW50IjoiVEVTVCIsImVudGl0eUlkIjoiYTQzOTVmZTctN2Y3Mi00MDcxLTkyMmMtMThmOWI1YzVlOTE3IiwiZXhwIjoxNzUxNjQ4MzMxLCJpYXQiOjE3NTE2NDQ3MzEsImludGVybmFsVXNlcklkIjoiOGY1ZTE3YjgtMzI4ZC01OWE5LWI0NTgtZDk1MmFhYWUxMGVmIiwiaXNzIjoiaHR0cHM6Ly9wcm9ncmFtbWFibGUtd2FsbGV0LmNpcmNsZS5jb20iLCJqdGkiOiI5MjgyZGQzNC1jMmU4LTRjNmQtOTNlMi01NGQzMzcwNWM2YjMiLCJzdWIiOiJlMTA0YTI1OC1kNTg2LTRlNTUtODhhZC1kODM3NmNmZDI2ZWEifQ.HpOMJSg33vnIp-X0n5w5ke7OEsJI1TwxHgDv6ShlMKZ6UwNzx_UH84E0NZZm_ZWnRw3PABPokvqaXUne5j4YKUkVnL6BoSBjWw7Lvhy9aZWCopqNz2bHcJ782VMQBik0LbSV7poO9w7qz8SZ1_d5HLgFY5MISjJ4Kswfn2puQNBQXG3Nmudlm6nY1HeHK7sPGTLEGVY8ibR73l-Tf6cloSlE9EHDkJ5YaJvlvTZEuYqxmlzIrmT6ZnllaIE0xn29E3PyNAFV9Gh8sfqqxae7CeH3VToNEWol9moaQt09alu0tdb4kcDIhUchHtWog17GEktOZ54VIN9QrF772o27xg',
-            userToken: userSessionTokenResponse.data?.userToken || '',
-            blockchains: [blockchain as Blockchain || 'ETH-SEPOLIA']
-        });
-
-        console.log('createPinResponse', blockchain, createPinResponse.data);
-        const createPinChallengeId = createPinResponse.data?.challengeId;
+        let challengeId = '';
+        if (existingWallets?.results && existingWallets?.results.length > 0) {
+            // 已经有钱包，肯定有PIN
+            const createWalletResponse = await circleClient.createWallet({
+                // userToken: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoTW9kZSI6IlBJTiIsImRldmVsb3BlckVudGl0eUVudmlyb25tZW50IjoiVEVTVCIsImVudGl0eUlkIjoiYTQzOTVmZTctN2Y3Mi00MDcxLTkyMmMtMThmOWI1YzVlOTE3IiwiZXhwIjoxNzUxNjQ4MzMxLCJpYXQiOjE3NTE2NDQ3MzEsImludGVybmFsVXNlcklkIjoiOGY1ZTE3YjgtMzI4ZC01OWE5LWI0NTgtZDk1MmFhYWUxMGVmIiwiaXNzIjoiaHR0cHM6Ly9wcm9ncmFtbWFibGUtd2FsbGV0LmNpcmNsZS5jb20iLCJqdGkiOiI5MjgyZGQzNC1jMmU4LTRjNmQtOTNlMi01NGQzMzcwNWM2YjMiLCJzdWIiOiJlMTA0YTI1OC1kNTg2LTRlNTUtODhhZC1kODM3NmNmZDI2ZWEifQ.HpOMJSg33vnIp-X0n5w5ke7OEsJI1TwxHgDv6ShlMKZ6UwNzx_UH84E0NZZm_ZWnRw3PABPokvqaXUne5j4YKUkVnL6BoSBjWw7Lvhy9aZWCopqNz2bHcJ782VMQBik0LbSV7poO9w7qz8SZ1_d5HLgFY5MISjJ4Kswfn2puQNBQXG3Nmudlm6nY1HeHK7sPGTLEGVY8ibR73l-Tf6cloSlE9EHDkJ5YaJvlvTZEuYqxmlzIrmT6ZnllaIE0xn29E3PyNAFV9Gh8sfqqxae7CeH3VToNEWol9moaQt09alu0tdb4kcDIhUchHtWog17GEktOZ54VIN9QrF772o27xg',
+                userToken: userSessionTokenResponse.data?.userToken || '',
+                blockchains: [blockchain as Blockchain || 'ETH-SEPOLIA'],
+                accountType: 'SCA',
+            });
+            challengeId = createWalletResponse.data?.challengeId || '';
+        } else {
+            const createWalletPinResponse = await circleClient.createUserPinWithWallets({
+                // userToken: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoTW9kZSI6IlBJTiIsImRldmVsb3BlckVudGl0eUVudmlyb25tZW50IjoiVEVTVCIsImVudGl0eUlkIjoiYTQzOTVmZTctN2Y3Mi00MDcxLTkyMmMtMThmOWI1YzVlOTE3IiwiZXhwIjoxNzUxNjQ4MzMxLCJpYXQiOjE3NTE2NDQ3MzEsImludGVybmFsVXNlcklkIjoiOGY1ZTE3YjgtMzI4ZC01OWE5LWI0NTgtZDk1MmFhYWUxMGVmIiwiaXNzIjoiaHR0cHM6Ly9wcm9ncmFtbWFibGUtd2FsbGV0LmNpcmNsZS5jb20iLCJqdGkiOiI5MjgyZGQzNC1jMmU4LTRjNmQtOTNlMi01NGQzMzcwNWM2YjMiLCJzdWIiOiJlMTA0YTI1OC1kNTg2LTRlNTUtODhhZC1kODM3NmNmZDI2ZWEifQ.HpOMJSg33vnIp-X0n5w5ke7OEsJI1TwxHgDv6ShlMKZ6UwNzx_UH84E0NZZm_ZWnRw3PABPokvqaXUne5j4YKUkVnL6BoSBjWw7Lvhy9aZWCopqNz2bHcJ782VMQBik0LbSV7poO9w7qz8SZ1_d5HLgFY5MISjJ4Kswfn2puQNBQXG3Nmudlm6nY1HeHK7sPGTLEGVY8ibR73l-Tf6cloSlE9EHDkJ5YaJvlvTZEuYqxmlzIrmT6ZnllaIE0xn29E3PyNAFV9Gh8sfqqxae7CeH3VToNEWol9moaQt09alu0tdb4kcDIhUchHtWog17GEktOZ54VIN9QrF772o27xg',
+                userToken: userSessionTokenResponse.data?.userToken || '',
+                blockchains: [blockchain as Blockchain || 'ETH-SEPOLIA'],
+                accountType: 'SCA',
+            });
+            challengeId = createWalletPinResponse.data?.challengeId || '';
+        }
 
         return {
             success: true,
             message: '钱包创建成功！',
             userToken: userSessionTokenResponse.data?.userToken,
             encryptionKey: userSessionTokenResponse.data?.encryptionKey,
-            challengeId: createPinChallengeId,
+            challengeId: challengeId,
         };
     }
 };
