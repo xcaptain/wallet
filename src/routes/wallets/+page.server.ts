@@ -9,15 +9,6 @@ export const load = async ({ locals, platform }) => {
         throw redirect(302, '/');
     }
 
-    console.log('apiKey', platform?.env.CIRCLE_API_KEY);
-    const circleClient = initiateUserControlledWalletsClient({
-        apiKey: platform?.env.CIRCLE_API_KEY ?? '',
-    });
-    const circleUser = await circleClient.getUser({
-        userId: 'fcae144a-c8c0-4778-a4c8-0d0a5c7fbcbd',
-    });
-    console.log('getUserResponse', circleUser.data);
-
     // TODO: 从数据库或 Circle API 获取用户的钱包列表
     // 目前返回空列表
     const sql = "select * from wallets where user_id = ? order by created_at desc";
