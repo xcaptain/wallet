@@ -39,3 +39,88 @@ CREATE TABLE IF NOT EXISTS "verification_tokens" (
     "expires" datetime NOT NULL DEFAULT NULL,
     PRIMARY KEY (token)
 );
+
+-- 使用一个单独的 circle_id 而不是 user_id，似乎会更加安全
+CREATE TABLE IF NOT EXISTS "circle_users" (
+    id int NOT NULL PRIMARY KEY AUTOINCREMENT,
+    circle_id text NOT NULL UNIQUE,
+    user_id text NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP  
+);
+
+-- Circle API wallet 示例数据结构：
+-- {
+-- id: '1dd007e9-24a9-51b4-87c6-367330e00649',
+-- state: 'LIVE',
+-- walletSetId: 'ac8ba27d-5970-5ebd-bf48-48a632a6874c',
+-- custodyType: 'ENDUSER',
+-- userId: 'e104a258-d586-4e55-88ad-d8376cfd26ea',
+-- address: '0xfdf029e50f2597c33033474cde08d0d93c562853',
+-- blockchain: 'ETH-SEPOLIA',
+-- accountType: 'EOA',
+-- updateDate: '2025-07-05T11:15:38Z',
+-- createDate: '2025-07-05T11:15:38Z'
+-- }
+
+CREATE TABLE IF NOT EXISTS "wallets" (
+    id text NOT NULL PRIMARY KEY,
+    user_id text NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    wallet_set_id text,
+    address text NOT NULL,
+    blockchain text NOT NULL,
+    account_type text DEFAULT 'EOA',
+    state text DEFAULT 'LIVE', -- LIVE, FROZEN
+    custody_type text DEFAULT 'ENDUSER', -- ENDUSER, DEVELOPER
+    created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    
+    -- 索引
+    UNIQUE(user_id, address, blockchain)
+);
+
+-- 初始化钱包数据示例
+-- INSERT INTO wallets (
+--     id,
+--     user_id,
+--     wallet_set_id,
+--     address,
+--     blockchain,
+--     account_type,
+--     state,
+--     custody_type,
+--     created_at,
+--     updated_at
+-- ) VALUES (
+--     '1dd007e9-24a9-51b4-87c6-367330e00649',
+--     'e104a258-d586-4e55-88ad-d8376cfd26ea',
+--     'ac8ba27d-5970-5ebd-bf48-48a632a6874c',
+--     '0xfdf029e50f2597c33033474cde08d0d93c562853',
+--     'ETH-SEPOLIA',
+--     'EOA',
+--     'LIVE',
+--     'ENDUSER',
+--     '2025-07-05T11:15:38Z',
+--     '2025-07-05T11:15:38Z'
+-- );
+
+-- Webhook 日志表，用于存储接收到的 webhook 数据
+CREATE TABLE IF NOT EXISTS "webhook_logs" (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    webhook_type text NOT NULL DEFAULT 'wallet', -- webhook 类型
+    raw_body text NOT NULL, -- 完整的 JSON body
+    headers text, -- 请求头信息 (JSON格式)
+    method text NOT NULL DEFAULT 'POST', -- HTTP 方法
+    ip_address text, -- 请求来源 IP
+    user_agent text, -- User-Agent
+    processed_at datetime, -- 处理时间
+    status text NOT NULL DEFAULT 'pending', -- pending, processed, failed
+    error_message text, -- 错误信息
+    created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 创建索引以提升查询性能
+CREATE INDEX IF NOT EXISTS idx_webhook_logs_type ON webhook_logs(webhook_type);
+CREATE INDEX IF NOT EXISTS idx_webhook_logs_status ON webhook_logs(status);
+CREATE INDEX IF NOT EXISTS idx_webhook_logs_created_at ON webhook_logs(created_at);

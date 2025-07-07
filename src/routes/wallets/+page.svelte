@@ -24,7 +24,7 @@
 
     // 表单字段
     let walletName = $state("我的钱包");
-    let blockchain = $state("Ethereum");
+    let blockchain = $state("ETH-SEPOLIA");
 
     // 模态框引用
     let createWalletModal: HTMLDialogElement;
@@ -208,6 +208,8 @@
                             if (result.data) {
                                 console.log('signature: ', result.data.signature);
                             }
+
+                            // TODO: 如果 callback 里返回了钱包信息，应该要在数据库创建钱包
                             console.log("Challenge ID executed successfully:", result);
                         });
 
@@ -215,7 +217,7 @@
                         // 通过这两个值，调用 circle sdk 为用户创建PIN
                         closeCreateModal();
                         walletName = "我的钱包";
-                        blockchain = "Ethereum";
+                        blockchain = Blockchain.Eth;
                     }
                 };
             }}
@@ -264,9 +266,33 @@
                         bind:value={blockchain}
                         required
                     >
-                        <option value="Ethereum">Ethereum</option>
-                        <option value="Polygon">Polygon</option>
-                        <option value="Arbitrum">Arbitrum</option>
+                        <!-- 主网 -->
+                        <optgroup label="主网">
+                            <option value="ETH">Ethereum (ETH)</option>
+                            <option value="MATIC">Polygon (MATIC)</option>
+                            <option value="ARB">Arbitrum (ARB)</option>
+                            <option value="AVAX">Avalanche (AVAX)</option>
+                            <option value="SOL">Solana (SOL)</option>
+                            <option value="NEAR">Near (NEAR)</option>
+                            <option value="BASE">Base</option>
+                            <option value="OP">Optimism (OP)</option>
+                            <option value="UNI">Unichain (UNI)</option>
+                            <option value="EVM">EVM</option>
+                        </optgroup>
+                        
+                        <!-- 测试网 -->
+                        <optgroup label="测试网">
+                            <option value="ETH-SEPOLIA">Ethereum Sepolia</option>
+                            <option value="MATIC-AMOY">Polygon Amoy</option>
+                            <option value="ARB-SEPOLIA">Arbitrum Sepolia</option>
+                            <option value="AVAX-FUJI">Avalanche Fuji</option>
+                            <option value="SOL-DEVNET">Solana Devnet</option>
+                            <option value="NEAR-TESTNET">Near Testnet</option>
+                            <option value="BASE-SEPOLIA">Base Sepolia</option>
+                            <option value="OP-SEPOLIA">Optimism Sepolia</option>
+                            <option value="UNI-SEPOLIA">Unichain Sepolia</option>
+                            <option value="EVM-TESTNET">EVM Testnet</option>
+                        </optgroup>
                     </select>
                 </div>
             </div>
