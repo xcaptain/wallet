@@ -4,6 +4,18 @@ import { type Blockchain, type Wallet, initiateUserControlledWalletsClient } fro
 export const load = async ({ locals, platform }) => {
     const session = await locals.auth();
 
+    const circleClient = initiateUserControlledWalletsClient({
+        apiKey: platform?.env.CIRCLE_API_KEY ?? '',
+        headers: {
+            'Host': 'api.circle.com',
+        }
+    });
+    console.log('circle client apikey', platform?.env.CIRCLE_API_KEY.slice(48, 78));
+    const circleUser = await circleClient.getUser({
+        userId: 'fcae144a-c8c0-4778-a4c8-0d0a5c7fbcbd',
+    });
+    console.log('getUserResponse', circleUser.data);
+
     // 如果用户未登录，重定向到首页
     if (!session?.user || !session.user.id) {
         throw redirect(302, '/');
@@ -59,6 +71,7 @@ export const actions = {
         const circleClient = initiateUserControlledWalletsClient({
             apiKey: platform?.env.CIRCLE_API_KEY ?? '',
         });
+        console.log('circle client apikey', platform?.env.CIRCLE_API_KEY.slice(48, 78));
         const circleUser = await circleClient.getUser({
             userId: session.user.id,
         });
