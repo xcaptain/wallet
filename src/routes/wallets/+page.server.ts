@@ -14,10 +14,11 @@ export const load = async ({ locals, platform }) => {
     const res = await fetch('https://api.circle.com/v1/w3s/users/fcae144a-c8c0-4778-a4c8-0d0a5c7fbcbd', {
         headers: {
             'Authorization': `Bearer ${platform?.env.CIRCLE_API_KEY ?? ''}`,
-            'Host': 'api.circle.com',
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
         }
     });
-    console.log('Circle API response:', res.status, await res.json());
+    console.log('Circle API response:', platform?.env.CIRCLE_API_KEY.length, res.headers, res.status, await res.json());
 
     // 如果用户未登录，重定向到首页
     if (!session?.user || !session.user.id) {
