@@ -4,18 +4,6 @@ import { type Blockchain, type Wallet, initiateUserControlledWalletsClient } fro
 export const load = async ({ locals, platform }) => {
     const session = await locals.auth();
 
-    // const circleClient = initiateUserControlledWalletsClient({
-    //     apiKey: platform?.env.CIRCLE_API_KEY ?? '',
-    // });
-
-    const res = await fetch('https://api.circle.com/v1/w3s/users/fcae144a-c8c0-4778-a4c8-0d0a5c7fbcbd', {
-        headers: {
-            'Authorization': `Bearer TEST_API_KEY:fd9c77554174c3286aa81cecdde4e20a:792ef6b74ee3e8e87c3d4071a74461be`,
-            'Content-Type': 'application/json',
-        }
-    });
-    console.log('Circle API response:', platform?.env.CIRCLE_API_KEY.length, platform?.env.CIRCLE_API_KEY.slice(40, 78), res.status, await res.json());
-
     // 如果用户未登录，重定向到首页
     if (!session?.user || !session.user.id) {
         throw redirect(302, '/');
