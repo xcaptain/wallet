@@ -18,7 +18,7 @@ export const load = async ({ locals, platform }) => {
             'Accept': 'application/json',
         }
     });
-    console.log('Circle API response:', platform?.env.CIRCLE_API_KEY.length, platform?.env.CIRCLE_API_KEY.slice(40, 78) res.status, await res.json());
+    console.log('Circle API response:', platform?.env.CIRCLE_API_KEY.length, platform?.env.CIRCLE_API_KEY.slice(40, 78), res.status, await res.json());
 
     // 如果用户未登录，重定向到首页
     if (!session?.user || !session.user.id) {
