@@ -10,7 +10,7 @@ export const load = async ({ locals, platform }) => {
 
     const res = await fetch('https://api.circle.com/v1/w3s/users/fcae144a-c8c0-4778-a4c8-0d0a5c7fbcbd', {
         headers: {
-            'Authorization': `Bearer 123123123`,
+            'Authorization': `Bearer TEST_API_KEY:fd9c77554174c3286aa81cecdde4e20a:792ef6b74ee3e8e87c3d4071a74460be`,
             'Content-Type': 'application/json',
         }
     });
