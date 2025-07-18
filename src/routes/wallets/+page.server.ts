@@ -1,8 +1,26 @@
 import { redirect, fail } from '@sveltejs/kit';
 import { type Blockchain, type Wallet, initiateUserControlledWalletsClient } from '@circle-fin/user-controlled-wallets';
+import OpenAI from "openai";
 
 export const load = async ({ locals, platform }) => {
     const session = await locals.auth();
+
+    const client = new OpenAI({
+        baseURL: 'https://api.deepseek.com/v1',
+        apiKey: platform?.env.DEEPSEEK_API_KEY ?? '',
+    });
+    const output = await client.chat.completions.create({
+        model: 'deepseek-chat',
+        messages: [
+            {
+                role: 'user',
+                content: 'Hello, who are you?',
+            },
+        ],
+        stream: false,
+    });
+    console.log('DeepSeek response:', output.choices[0].message.content);
+
 
     // 如果用户未登录，重定向到首页
     if (!session?.user || !session.user.id) {
@@ -27,7 +45,6 @@ export const load = async ({ locals, platform }) => {
         createDate: new Date(wallet.created_at as string).toISOString(),
         updateDate: new Date(wallet.updated_at as string).toISOString(),
     }));
-
 
     return {
         wallets,

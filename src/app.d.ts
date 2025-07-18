@@ -15,6 +15,7 @@ declare global {
 
 				CIRCLE_API_KEY: string;
 				CIRCLE_APP_ID: string;
+				DEEPSEEK_API_KEY: string;
 			}
 		}
 	}
