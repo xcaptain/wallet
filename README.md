@@ -12,7 +12,6 @@
 circle wallet sdk 内置了一些登录方式，如 google oauth, email，但是在这里我们使用已经很成熟的 `authjs` 来实现各种登录方式。对于 circle 来说，不在乎用户在 app 侧是如何登录的，app 登录成功后，去 circle 注册用户，创建钱包，设置 PIN 才是circle 要关注的
 
 
-
 ## Wallet widget
 
 这是一个钱包小挂件，传统钱包如 metamask, phantom 要求安装浏览器插件，而支持 walletConnect 协议的客户端钱包，需要扫描二维码授权网站使用钱包。
@@ -30,11 +29,7 @@ circle wallet sdk 内置了一些登录方式，如 google oauth, email，但是
 
 网站部署在新的 cloudflare workers 上，使用 `wrangler.jsonc` 作为配置文件
 
-### 初始化数据库
-
-```shell
-wrangler d1 execute prod-wallet --file="./database/schema.sql"
-```
+目前发现一个重大问题，circle wallet 似乎不支持从 cloudflare workers 发请求，可能是因为这样会影响他们的 ratelimit 计算规则，如果这个问题不解决，那么现在这个架构就是有问题的
 
 ### 配置环境变量
 
